@@ -27,6 +27,10 @@ def receive():
         accelData, HRData, absolute_start_time = LoadData.parse_data_json(json_data)
 
         LoadData.write_data_to_files(accelData, HRData, file_number, absolute_start_time, docker_root)
+        
+        return jsonify(message="Data received and saved successfully"), 200
+    else:
+        return jsonify(message="Request was not JSON"), 400
     
 @app.route('/sleep_data', methods=["POST"])
 def receive_sleep_data():
