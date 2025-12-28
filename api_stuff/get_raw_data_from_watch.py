@@ -37,11 +37,14 @@ def receive():
     if request.is_json:
         json_data = request.get_json()
 
-        accelData, HRData, absolute_start_time, package_start_time, userID = LoadData.parse_data_json(json_data)
-        # file_paths, absolute_start_time, package_start_time, file_path_endings = LoadData.write_data_to_files(accelData, HRData, absolute_start_time, package_start_time, docker_root)
-        # S3_Stuff.upload_motion_files_to_s3(s3, userID, absolute_start_time, package_start_time, file_path_endings, file_paths)
-        numpy_arrays, absolute_start_time, package_start_time, file_path_endings = LoadData.write_data_to_numpy_array(accelData, HRData, absolute_start_time, package_start_time)
-        S3_Stuff.upload_numpy_arrays_to_s3(s3, userID, absolute_start_time, package_start_time, file_path_endings, numpy_arrays)
+        data_list = json_data if isinstance(json_data, list) else [json_data]
+
+        for data in data_list:
+            accelData, HRData, absolute_start_time, package_start_time, userID = LoadData.parse_data_json(data)
+            # file_paths, absolute_start_time, package_start_time, file_path_endings = LoadData.write_data_to_files(accelData, HRData, absolute_start_time, package_start_time, docker_root)
+            # S3_Stuff.upload_motion_files_to_s3(s3, userID, absolute_start_time, package_start_time, file_path_endings, file_paths)
+            numpy_arrays, absolute_start_time, package_start_time, file_path_endings = LoadData.write_data_to_numpy_array(accelData, HRData, absolute_start_time, package_start_time)
+            S3_Stuff.upload_numpy_arrays_to_s3(s3, userID, absolute_start_time, package_start_time, file_path_endings, numpy_arrays)
         
         return jsonify(message="Data received and saved successfully"), 200
     else:

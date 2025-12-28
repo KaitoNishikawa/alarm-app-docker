@@ -15,7 +15,7 @@ class S3_Stuff():
             absolute_timestamp = datetime.datetime.fromtimestamp(round(absolute_start_time))
             package_timestamp = datetime.datetime.fromtimestamp(round(package_start_time))
 
-            key = f'users/{user_id}/{absolute_timestamp.strftime('%Y%m%d_%H%M%S')}/{data_type}/{package_timestamp.strftime('%Y%m%d_%H%M%S')}_{file_path_ending}'
+            key = f"users/{user_id}/{absolute_timestamp.strftime('%Y%m%d_%H%M%S')}/{data_type}/{package_timestamp.strftime('%Y%m%d_%H%M%S')}_{file_path_ending}"
             obj = bucket.Object(key)
             try:
                 obj.upload_file(file_path)
